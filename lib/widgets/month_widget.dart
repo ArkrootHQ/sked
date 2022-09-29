@@ -26,6 +26,11 @@ class MonthItem extends StatefulWidget {
     required this.lastDate,
     required this.displayedMonth,
     this.dragStartBehavior = DragStartBehavior.start,
+    this.highLightColor,
+    this.selectedColor,
+    this.selectedTextStyle,
+    this.disabledTexStyle,
+    this.showCurrentDate = true,
   })  : assert(!firstDate.isAfter(lastDate)),
         assert(selectedDateStart == null || !selectedDateStart.isBefore(firstDate)),
         assert(selectedDateEnd == null || !selectedDateEnd.isBefore(firstDate)),
@@ -78,6 +83,17 @@ class MonthItem extends StatefulWidget {
   ///    the different behaviors.
   final DragStartBehavior dragStartBehavior;
 
+  final Color? highLightColor;
+
+  final Color? selectedColor;
+
+  final TextStyle? selectedTextStyle;
+
+  final TextStyle? disabledTexStyle;
+
+
+  final bool showCurrentDate;
+
   @override
   _MonthItemState createState() => _MonthItemState();
 }
@@ -92,7 +108,7 @@ class _MonthItemState extends State<MonthItem> {
     final int daysInMonth = DateUtils.getDaysInMonth(widget.displayedMonth.year, widget.displayedMonth.month);
     _dayFocusNodes = List<FocusNode>.generate(
       daysInMonth,
-          (int index) => FocusNode(skipTraversal: true, debugLabel: 'Day ${index + 1}'),
+      (int index) => FocusNode(skipTraversal: true, debugLabel: 'Day ${index + 1}'),
     );
   }
 
@@ -115,7 +131,7 @@ class _MonthItemState extends State<MonthItem> {
   }
 
   Color _highlightColor(BuildContext context) {
-    return Theme.of(context).colorScheme.primary.withOpacity(0.12);
+    return (widget.highLightColor ?? Theme.of(context).colorScheme.primary).withOpacity(0.12);
   }
 
   void _dayFocusChanged(bool focused) {
@@ -142,20 +158,22 @@ class _MonthItemState extends State<MonthItem> {
     }
   }
 
+  // Create day item.
   Widget _buildDayItem(BuildContext context, DateTime dayToBuild, int firstDayOffset, int daysInMonth) {
     final ThemeData theme = Theme.of(context);
     final ColorScheme colorScheme = theme.colorScheme;
     final TextTheme textTheme = theme.textTheme;
     final MaterialLocalizations localizations = MaterialLocalizations.of(context);
+
     final TextDirection textDirection = Directionality.of(context);
     final Color highlightColor = _highlightColor(context);
+
     final int day = dayToBuild.day;
 
     final bool isDisabled = dayToBuild.isAfter(widget.lastDate) || dayToBuild.isBefore(widget.firstDate);
-
     BoxDecoration? decoration;
-    TextStyle? itemStyle = textTheme.bodyText2;
 
+    TextStyle? itemStyle = textTheme.bodyText2;
     final bool isRangeSelected = widget.selectedDateStart != null && widget.selectedDateEnd != null;
     final bool isSelectedDayStart =
         widget.selectedDateStart != null && dayToBuild.isAtSameMomentAs(widget.selectedDateStart!);
@@ -170,15 +188,14 @@ class _MonthItemState extends State<MonthItem> {
     if (isSelectedDayStart || isSelectedDayEnd) {
       // The selected start and end dates gets a circle background
       // highlight, and a contrasting text color.
-      itemStyle = textTheme.bodyText2?.apply(color: colorScheme.onPrimary);
+      itemStyle = widget.selectedTextStyle ?? textTheme.bodyText2?.apply(color: colorScheme.onPrimary);
       decoration = BoxDecoration(
-        color: colorScheme.primary,
+        color: widget.selectedColor ?? colorScheme.primary,
         shape: BoxShape.circle,
       );
 
       if (isRangeSelected && widget.selectedDateStart != widget.selectedDateEnd) {
-        final HighlightPainterStyle style =
-        isSelectedDayStart ? HighlightPainterStyle.highlightTrailing : HighlightPainterStyle.highlightLeading;
+        final HighlightPainterStyle style = isSelectedDayStart ? HighlightPainterStyle.highlightTrailing : HighlightPainterStyle.highlightLeading;
         highlightPainter = HighlightPainter(
           color: highlightColor,
           style: style,
@@ -193,8 +210,8 @@ class _MonthItemState extends State<MonthItem> {
         textDirection: textDirection,
       );
     } else if (isDisabled) {
-      itemStyle = textTheme.bodyText2?.apply(color: colorScheme.onSurface.withOpacity(0.38));
-    } else if (DateUtils.isSameDay(widget.currentDate, dayToBuild)) {
+      itemStyle = widget.disabledTexStyle ?? textTheme.bodyText2?.apply(color: colorScheme.onSurface.withOpacity(0.38));
+    } else if (DateUtils.isSameDay(widget.currentDate, dayToBuild) && widget.showCurrentDate) {
       // The current day gets a different text color and a circle stroke
       // border.
       itemStyle = textTheme.bodyText2?.apply(color: colorScheme.primary);
@@ -360,4 +377,3 @@ class _MonthItemState extends State<MonthItem> {
     );
   }
 }
-
