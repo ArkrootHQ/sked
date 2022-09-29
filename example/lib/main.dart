@@ -10,11 +10,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Kalendar',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Kalendar Demo Home Page'),
     );
   }
 }
@@ -39,7 +39,6 @@ class _MyHomePageState extends State<MyHomePage> {
           lastDate: DateTime(2032),
           onEndDateChanged: (date) {},
           onStartDateChanged: (date) {},
-          initialEntryMode: DatePickerEntryMode.input,
           initialDateRange: DateTimeRange(
             start: DateTime.now(),
             end: DateTime.now().add(
