@@ -91,7 +91,6 @@ class MonthItem extends StatefulWidget {
 
   final TextStyle? disabledTexStyle;
 
-
   final bool showCurrentDate;
 
   @override
@@ -195,7 +194,8 @@ class _MonthItemState extends State<MonthItem> {
       );
 
       if (isRangeSelected && widget.selectedDateStart != widget.selectedDateEnd) {
-        final HighlightPainterStyle style = isSelectedDayStart ? HighlightPainterStyle.highlightTrailing : HighlightPainterStyle.highlightLeading;
+        final HighlightPainterStyle style =
+            isSelectedDayStart ? HighlightPainterStyle.highlightTrailing : HighlightPainterStyle.highlightLeading;
         highlightPainter = HighlightPainter(
           color: highlightColor,
           style: style,

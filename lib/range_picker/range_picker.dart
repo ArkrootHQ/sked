@@ -25,6 +25,11 @@ class VerticalDateRangePicker extends StatefulWidget {
     this.restorationId,
     required this.onEndDateChanged,
     required this.onStartDateChanged,
+    this.highLightColor,
+    this.selectedColor,
+    this.selectedTextStyle,
+    this.disabledTexStyle,
+    this.showCurrentDate,
   }) : super(key: key);
 
   /// The date range that the date range picker starts with when it opens.
@@ -70,6 +75,16 @@ class VerticalDateRangePicker extends StatefulWidget {
 
   final ValueChanged<DateTime> onEndDateChanged;
 
+  final Color? highLightColor;
+
+  final Color? selectedColor;
+
+  final TextStyle? selectedTextStyle;
+
+  final TextStyle? disabledTexStyle;
+
+  final bool? showCurrentDate;
+
   @override
   State<VerticalDateRangePicker> createState() => _VerticalDateRangePickerState();
 }
@@ -109,15 +124,27 @@ class _VerticalDateRangePickerState extends State<VerticalDateRangePicker> with 
     final Widget contents;
     final Size size;
 
-    contents = _CalendarRangePicker(
-      key: _calendarPickerKey,
-      selectedStartDate: _selectedStart.value,
-      selectedEndDate: _selectedEnd.value,
-      firstDate: widget.firstDate,
-      lastDate: widget.lastDate,
-      currentDate: widget.currentDate,
-      onStartDateChanged: _handleStartDateChanged,
-      onEndDateChanged: _handleEndDateChanged,
+    contents = SafeArea(
+      top: false,
+      left: false,
+      right: false,
+      child: Scaffold(
+        body: CalendarDateRangePicker(
+          key: _calendarPickerKey,
+          initialStartDate: _selectedStart.value,
+          initialEndDate: _selectedEnd.value,
+          firstDate: widget.firstDate,
+          lastDate: widget.lastDate,
+          currentDate: widget.currentDate,
+          onStartDateChanged: _handleStartDateChanged,
+          onEndDateChanged: _handleEndDateChanged,
+          highLightColor: widget.highLightColor,
+          selectedColor: widget.selectedColor,
+          selectedTextStyle: widget.selectedTextStyle,
+          disabledTexStyle: widget.disabledTexStyle,
+          showCurrentDate: widget.showCurrentDate ?? true,
+        ),
+      ),
     );
 
     size = mediaQuery.size;
@@ -134,47 +161,6 @@ class _VerticalDateRangePickerState extends State<VerticalDateRangePicker> with 
           child: Builder(builder: (BuildContext context) {
             return contents;
           }),
-        ),
-      ),
-    );
-  }
-}
-
-class _CalendarRangePicker extends StatelessWidget {
-  const _CalendarRangePicker({
-    Key? key,
-    required this.selectedStartDate,
-    required this.selectedEndDate,
-    required this.firstDate,
-    required this.lastDate,
-    required this.currentDate,
-    required this.onStartDateChanged,
-    required this.onEndDateChanged,
-  }) : super(key: key);
-
-  final DateTime? selectedStartDate;
-  final DateTime? selectedEndDate;
-  final DateTime firstDate;
-  final DateTime lastDate;
-  final DateTime? currentDate;
-  final ValueChanged<DateTime> onStartDateChanged;
-  final ValueChanged<DateTime?> onEndDateChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      left: false,
-      right: false,
-      child: Scaffold(
-        body: CalendarDateRangePicker(
-          initialStartDate: selectedStartDate,
-          initialEndDate: selectedEndDate,
-          firstDate: firstDate,
-          lastDate: lastDate,
-          currentDate: currentDate,
-          onStartDateChanged: onStartDateChanged,
-          onEndDateChanged: onEndDateChanged,
         ),
       ),
     );

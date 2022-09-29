@@ -1,5 +1,3 @@
-
-
 const double monthItemRowHeight = 42.0;
 const double maxCalendarWidthLandscape = 384.0;
 const double maxCalendarWidthPortrait = 480.0;

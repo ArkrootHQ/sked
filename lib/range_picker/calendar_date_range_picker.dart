@@ -17,6 +17,11 @@ class CalendarDateRangePicker extends StatefulWidget {
     DateTime? currentDate,
     required this.onStartDateChanged,
     required this.onEndDateChanged,
+    this.highLightColor,
+    this.selectedColor,
+    this.selectedTextStyle,
+    this.disabledTexStyle,
+    this.showCurrentDate,
   })  : initialStartDate = initialStartDate != null ? DateUtils.dateOnly(initialStartDate) : null,
         initialEndDate = initialEndDate != null ? DateUtils.dateOnly(initialEndDate) : null,
         firstDate = DateUtils.dateOnly(firstDate),
@@ -51,6 +56,16 @@ class CalendarDateRangePicker extends StatefulWidget {
 
   /// Called when the user changes the end date of the selected range.
   final ValueChanged<DateTime?>? onEndDateChanged;
+
+  final Color? highLightColor;
+
+  final Color? selectedColor;
+
+  final TextStyle? selectedTextStyle;
+
+  final TextStyle? disabledTexStyle;
+
+  final bool? showCurrentDate;
 
   @override
   _CalendarDateRangePickerState createState() => _CalendarDateRangePickerState();
@@ -153,6 +168,11 @@ class _CalendarDateRangePickerState extends State<CalendarDateRangePicker> {
       lastDate: widget.lastDate,
       displayedMonth: month,
       onChanged: _updateSelection,
+      highLightColor: widget.highLightColor,
+      selectedColor: widget.selectedColor,
+      selectedTextStyle: widget.selectedTextStyle,
+      disabledTexStyle: widget.disabledTexStyle,
+      showCurrentDate: widget.showCurrentDate ?? true,
     );
   }
 
@@ -327,11 +347,3 @@ class _CalendarKeyboardNavigatorState extends State<_CalendarKeyboardNavigator> 
     );
   }
 }
-
-
-
-
-
-
-
-

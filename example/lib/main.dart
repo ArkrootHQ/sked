@@ -36,7 +36,8 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: VerticalDateRangePicker(
           firstDate: DateTime.now(),
-          lastDate: DateTime(2032),
+          lastDate: DateTime(DateTime.now().year + 5),
+
           onEndDateChanged: (date) {},
           onStartDateChanged: (date) {},
           initialDateRange: DateTimeRange(
