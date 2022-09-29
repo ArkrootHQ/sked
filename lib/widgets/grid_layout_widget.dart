@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/rendering.dart';
+import 'package:kalendar/constants.dart';
 
-import '../constants.dart';
 const monthItemGridDelegate = MonthItemGridDelegate();
 
 class MonthItemGridDelegate extends SliverGridDelegate {
@@ -34,10 +34,9 @@ class _MonthSliverGridLayout extends SliverGridLayout {
     required this.dayChildWidth,
     required this.edgeChildWidth,
     required this.reverseCrossAxis,
-  })  : assert(crossAxisCount != null && crossAxisCount > 0),
-        assert(dayChildWidth != null && dayChildWidth >= 0),
-        assert(edgeChildWidth != null && edgeChildWidth >= 0),
-        assert(reverseCrossAxis != null);
+  })  : assert(crossAxisCount > 0),
+        assert(dayChildWidth >= 0),
+        assert(edgeChildWidth >= 0);
 
   /// The number of children in the cross axis.
   final int crossAxisCount;
