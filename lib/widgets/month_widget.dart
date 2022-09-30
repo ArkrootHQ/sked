@@ -83,8 +83,11 @@ class MonthItem extends StatefulWidget {
   ///    the different behaviors.
   final DragStartBehavior dragStartBehavior;
 
+  /// The highlight color for the the selected dates
+  /// By default the color will be [colorScheme.primary].
   final Color? highLightColor;
 
+  /// The color of the selected dates.
   final Color? selectedColor;
 
   final TextStyle? selectedTextStyle;

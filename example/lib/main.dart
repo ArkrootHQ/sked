@@ -1,4 +1,4 @@
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:kalendar/kalendar.dart';
 
 void main() {
@@ -37,8 +37,9 @@ class _MyHomePageState extends State<MyHomePage> {
         child: VerticalDateRangePicker(
           firstDate: DateTime.now(),
           lastDate: DateTime(DateTime.now().year + 5),
-
+          highLightColor: Colors.black,
           onEndDateChanged: (date) {},
+          selectedColor: Colors.black,
           onStartDateChanged: (date) {},
           initialDateRange: DateTimeRange(
             start: DateTime.now(),
