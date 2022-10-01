@@ -29,17 +29,17 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.redAccent,
       ),
       body: Center(
         child: VerticalDateRangePicker(
           firstDate: DateTime.now(),
           lastDate: DateTime(DateTime.now().year + 10),
-          highLightColor: Colors.black,
+          highLightColor: Colors.redAccent,
           onEndDateChanged: (date) {},
-          selectedColor: Colors.black,
+          selectedColor: Colors.redAccent,
           onStartDateChanged: (date) {},
-          splashColor: Colors.black,
+          splashColor: Colors.redAccent,
           presentDayStrokeColor: Colors.black,
           selectedTextStyle: const TextStyle(
             fontWeight: FontWeight.bold,
