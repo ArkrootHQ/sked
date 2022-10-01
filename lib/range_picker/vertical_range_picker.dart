@@ -21,7 +21,15 @@ class VerticalDateRangePicker extends StatefulWidget {
     this.selectedColor,
     this.selectedTextStyle,
     this.disabledTexStyle,
-    this.showCurrentDate,
+    this.showPresentDay,
+    this.presentDayStrokeColor,
+    this.itemHeight,
+    this.splashColor,
+    this.spaceBetweenEachMonth,
+    this.dayTextStyle,
+    this.spaceBetweenRows,
+    this.monthNameHeight,
+    this.monthTextStyle,
   }) : super(key: key);
 
   /// The date range that the date range picker starts with when it opens.
@@ -63,27 +71,68 @@ class VerticalDateRangePicker extends StatefulWidget {
   ///    Flutter.
   final String? restorationId;
 
+  /// Called when the user changes the start date of the selected range.
   final ValueChanged<DateTime> onStartDateChanged;
 
-  final ValueChanged<DateTime> onEndDateChanged;
+  /// Called when the user changes the end date of the selected range.
+  final ValueChanged<DateTime?> onEndDateChanged;
 
+  /// The highlight color for the the selected dates
+  /// By default the color will be [colorScheme.primary].
   final Color? highLightColor;
 
+  /// The color of the selected dates.
   final Color? selectedColor;
 
+  /// Text style for the selected day items.
   final TextStyle? selectedTextStyle;
 
+  /// Text style for the disabled day items.
   final TextStyle? disabledTexStyle;
 
-  final bool? showCurrentDate;
+  /// Boolean to hide or show the selection of current date.
+  /// By default the value will be true.
+  final bool? showPresentDay;
+
+  /// The current day gets a different text color and a circle stroke
+  /// border. This prop only shows effect when [showPresentDay] is true.
+  final Color? presentDayStrokeColor;
+
+  /// Item height of each day in month.
+  final double? itemHeight;
+
+  /// The splash color for each day of the month. By default the
+  /// value will be [ColorScheme.primary].
+  final Color? splashColor;
+
+  /// Space between each month. By default the height between each month
+  /// will be 12.
+  final double? spaceBetweenEachMonth;
+
+  /// The text style for all days. By default the text style
+  /// is [textTheme.bodyText2].
+  final TextStyle? dayTextStyle;
+
+  /// Space between rows.
+  final double? spaceBetweenRows;
+
+  /// Height of the month name widget.
+  final double? monthNameHeight;
+
+  /// Text style for month names.
+  final TextStyle? monthTextStyle;
 
   @override
-  State<VerticalDateRangePicker> createState() => _VerticalDateRangePickerState();
+  State<VerticalDateRangePicker> createState() =>
+      _VerticalDateRangePickerState();
 }
 
-class _VerticalDateRangePickerState extends State<VerticalDateRangePicker> with RestorationMixin {
-  late final RestorableDateTimeN _selectedStart = RestorableDateTimeN(widget.initialDateRange?.start);
-  late final RestorableDateTimeN _selectedEnd = RestorableDateTimeN(widget.initialDateRange?.end);
+class _VerticalDateRangePickerState extends State<VerticalDateRangePicker>
+    with RestorationMixin {
+  late final RestorableDateTimeN _selectedStart =
+      RestorableDateTimeN(widget.initialDateRange?.start);
+  late final RestorableDateTimeN _selectedEnd =
+      RestorableDateTimeN(widget.initialDateRange?.end);
   final RestorableBool _autoValidate = RestorableBool(false);
   final GlobalKey _calendarPickerKey = GlobalKey();
 
@@ -134,7 +183,15 @@ class _VerticalDateRangePickerState extends State<VerticalDateRangePicker> with 
           selectedColor: widget.selectedColor,
           selectedTextStyle: widget.selectedTextStyle,
           disabledTexStyle: widget.disabledTexStyle,
-          showCurrentDate: widget.showCurrentDate ?? true,
+          showPresentDay: widget.showPresentDay ?? true,
+          currentDayStrokeColor: widget.presentDayStrokeColor,
+          dayTextStyle: widget.dayTextStyle,
+          itemHeight: widget.itemHeight,
+          spaceBetweenEachMonth: widget.spaceBetweenEachMonth,
+          spaceBetweenRows: widget.spaceBetweenRows,
+          splashColor: widget.splashColor,
+          monthNameHeight: widget.monthNameHeight,
+          monthTextStyle: widget.monthTextStyle,
         ),
       ),
     );

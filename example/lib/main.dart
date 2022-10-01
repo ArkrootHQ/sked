@@ -9,12 +9,9 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Kalendar',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Kalendar Demo Home Page'),
+      home: MyHomePage(title: 'Kalendar Demo Home Page'),
     );
   }
 }
@@ -32,15 +29,22 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        backgroundColor: Colors.black,
       ),
       body: Center(
         child: VerticalDateRangePicker(
           firstDate: DateTime.now(),
-          lastDate: DateTime(DateTime.now().year + 5),
+          lastDate: DateTime(DateTime.now().year + 10),
           highLightColor: Colors.black,
           onEndDateChanged: (date) {},
           selectedColor: Colors.black,
           onStartDateChanged: (date) {},
+          splashColor: Colors.black,
+          presentDayStrokeColor: Colors.black,
+          selectedTextStyle: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
           initialDateRange: DateTimeRange(
             start: DateTime.now(),
             end: DateTime.now().add(

@@ -21,9 +21,18 @@ class CalendarDateRangePicker extends StatefulWidget {
     this.selectedColor,
     this.selectedTextStyle,
     this.disabledTexStyle,
-    this.showCurrentDate,
-  })  : initialStartDate = initialStartDate != null ? DateUtils.dateOnly(initialStartDate) : null,
-        initialEndDate = initialEndDate != null ? DateUtils.dateOnly(initialEndDate) : null,
+    this.showPresentDay,
+    this.currentDayStrokeColor,
+    this.itemHeight,
+    this.splashColor,
+    this.spaceBetweenEachMonth,
+    this.dayTextStyle,
+    this.spaceBetweenRows, this.monthNameHeight, this.monthTextStyle,
+  })  : initialStartDate = initialStartDate != null
+            ? DateUtils.dateOnly(initialStartDate)
+            : null,
+        initialEndDate =
+            initialEndDate != null ? DateUtils.dateOnly(initialEndDate) : null,
         firstDate = DateUtils.dateOnly(firstDate),
         lastDate = DateUtils.dateOnly(lastDate),
         currentDate = DateUtils.dateOnly(currentDate ?? DateTime.now()),
@@ -33,7 +42,8 @@ class CalendarDateRangePicker extends StatefulWidget {
             this.initialEndDate == null ||
             !this.initialStartDate!.isAfter(initialEndDate!),
         'initialStartDate must be on or before initialEndDate.');
-    assert(!this.lastDate.isBefore(this.firstDate), 'firstDate must be on or before lastDate.');
+    assert(!this.lastDate.isBefore(this.firstDate),
+        'firstDate must be on or before lastDate.');
   }
 
   /// The [DateTime] that represents the start of the initial date range selection.
@@ -57,18 +67,54 @@ class CalendarDateRangePicker extends StatefulWidget {
   /// Called when the user changes the end date of the selected range.
   final ValueChanged<DateTime?>? onEndDateChanged;
 
+  /// The highlight color for the the selected dates
+  /// By default the color will be [colorScheme.primary].
   final Color? highLightColor;
 
+  /// The color of the selected dates.
   final Color? selectedColor;
 
+  /// Text style for the selected day items.
   final TextStyle? selectedTextStyle;
 
+  /// Text style for the disabled day items.
   final TextStyle? disabledTexStyle;
 
-  final bool? showCurrentDate;
+  /// Boolean to hide or show the selection of current date.
+  /// By default the value will be true.
+  final bool? showPresentDay;
+
+  /// The current day gets a different text color and a circle stroke
+  /// border. This prop only shows effect when [showPresentDay] is true.
+  final Color? currentDayStrokeColor;
+
+  /// Item height of each day in month.
+  final double? itemHeight;
+
+  /// The splash color for each day of the month. By default the
+  /// value will be [ColorScheme.primary].
+  final Color? splashColor;
+
+  /// Space between each month. By default the height between each month
+  /// will be 12.
+  final double? spaceBetweenEachMonth;
+
+  /// The text style for all days. By default the text style
+  /// is [textTheme.bodyText2].
+  final TextStyle? dayTextStyle;
+
+  /// Space between rows.
+  final double? spaceBetweenRows;
+
+  /// Height of the month name widget.
+  final double? monthNameHeight;
+
+  /// Text style for month names.
+  final TextStyle? monthTextStyle;
 
   @override
-  _CalendarDateRangePickerState createState() => _CalendarDateRangePickerState();
+  _CalendarDateRangePickerState createState() =>
+      _CalendarDateRangePickerState();
 }
 
 class _CalendarDateRangePickerState extends State<CalendarDateRangePicker> {
@@ -90,7 +136,8 @@ class _CalendarDateRangePickerState extends State<CalendarDateRangePicker> {
     // Calculate the index for the initially displayed month. This is needed to
     // divide the list of months into two `SliverList`s.
     final DateTime initialDate = widget.initialStartDate ?? widget.currentDate;
-    if (!initialDate.isBefore(widget.firstDate) && !initialDate.isAfter(widget.lastDate)) {
+    if (!initialDate.isBefore(widget.firstDate) &&
+        !initialDate.isAfter(widget.lastDate)) {
       _initialMonthIndex = DateUtils.monthDelta(widget.firstDate, initialDate);
     }
 
@@ -115,7 +162,8 @@ class _CalendarDateRangePickerState extends State<CalendarDateRangePicker> {
     }
   }
 
-  int get _numberOfMonths => DateUtils.monthDelta(widget.firstDate, widget.lastDate) + 1;
+  int get _numberOfMonths =>
+      DateUtils.monthDelta(widget.firstDate, widget.lastDate) + 1;
 
   void _vibrate() {
     switch (Theme.of(context).platform) {
@@ -143,7 +191,9 @@ class _CalendarDateRangePickerState extends State<CalendarDateRangePicker> {
   void _updateSelection(DateTime date) {
     _vibrate();
     setState(() {
-      if (_startDate != null && _endDate == null && !date.isBefore(_startDate!)) {
+      if (_startDate != null &&
+          _endDate == null &&
+          !date.isBefore(_startDate!)) {
         _endDate = date;
         widget.onEndDateChanged?.call(_endDate);
       } else {
@@ -157,9 +207,13 @@ class _CalendarDateRangePickerState extends State<CalendarDateRangePicker> {
     });
   }
 
-  Widget _buildMonthItem(BuildContext context, int index, bool beforeInitialMonth) {
-    final int monthIndex = beforeInitialMonth ? _initialMonthIndex - index - 1 : _initialMonthIndex + index;
-    final DateTime month = DateUtils.addMonthsToMonthDate(widget.firstDate, monthIndex);
+  Widget _buildMonthItem(
+      BuildContext context, int index, bool beforeInitialMonth) {
+    final int monthIndex = beforeInitialMonth
+        ? _initialMonthIndex - index - 1
+        : _initialMonthIndex + index;
+    final DateTime month =
+        DateUtils.addMonthsToMonthDate(widget.firstDate, monthIndex);
     return MonthItem(
       selectedDateStart: _startDate,
       selectedDateEnd: _endDate,
@@ -172,7 +226,13 @@ class _CalendarDateRangePickerState extends State<CalendarDateRangePicker> {
       selectedColor: widget.selectedColor,
       selectedTextStyle: widget.selectedTextStyle,
       disabledTexStyle: widget.disabledTexStyle,
-      showCurrentDay: widget.showCurrentDate ?? true,
+      showCurrentDay: widget.showPresentDay ?? true,
+      currentDayStrokeColor: widget.currentDayStrokeColor,
+      dayTextStyle: widget.dayTextStyle,
+      itemHeight: widget.itemHeight,
+      spaceBetweenEachMonth: widget.spaceBetweenEachMonth,
+      spaceBetweenRows: widget.spaceBetweenRows,
+      splashColor: widget.splashColor,
     );
   }
 
@@ -187,7 +247,8 @@ class _CalendarDateRangePickerState extends State<CalendarDateRangePicker> {
           child: _CalendarKeyboardNavigator(
             firstDate: widget.firstDate,
             lastDate: widget.lastDate,
-            initialFocusedDay: _startDate ?? widget.initialStartDate ?? widget.currentDate,
+            initialFocusedDay:
+                _startDate ?? widget.initialStartDate ?? widget.currentDate,
             // In order to prevent performance issues when displaying the
             // correct initial month, 2 `SliverList`s are used to split the
             // months. The first item in the second SliverList is the initial
@@ -199,14 +260,16 @@ class _CalendarDateRangePickerState extends State<CalendarDateRangePicker> {
               slivers: <Widget>[
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) => _buildMonthItem(context, index, true),
+                    (BuildContext context, int index) =>
+                        _buildMonthItem(context, index, true),
                     childCount: _initialMonthIndex,
                   ),
                 ),
                 SliverList(
                   key: sliverAfterKey,
                   delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) => _buildMonthItem(context, index, false),
+                    (BuildContext context, int index) =>
+                        _buildMonthItem(context, index, false),
                     childCount: _numberOfMonths - _initialMonthIndex,
                   ),
                 ),
@@ -234,15 +297,22 @@ class _CalendarKeyboardNavigator extends StatefulWidget {
   final DateTime initialFocusedDay;
 
   @override
-  _CalendarKeyboardNavigatorState createState() => _CalendarKeyboardNavigatorState();
+  _CalendarKeyboardNavigatorState createState() =>
+      _CalendarKeyboardNavigatorState();
 }
 
-class _CalendarKeyboardNavigatorState extends State<_CalendarKeyboardNavigator> {
-  final Map<ShortcutActivator, Intent> _shortcutMap = const <ShortcutActivator, Intent>{
-    SingleActivator(LogicalKeyboardKey.arrowLeft): DirectionalFocusIntent(TraversalDirection.left),
-    SingleActivator(LogicalKeyboardKey.arrowRight): DirectionalFocusIntent(TraversalDirection.right),
-    SingleActivator(LogicalKeyboardKey.arrowDown): DirectionalFocusIntent(TraversalDirection.down),
-    SingleActivator(LogicalKeyboardKey.arrowUp): DirectionalFocusIntent(TraversalDirection.up),
+class _CalendarKeyboardNavigatorState
+    extends State<_CalendarKeyboardNavigator> {
+  final Map<ShortcutActivator, Intent> _shortcutMap =
+      const <ShortcutActivator, Intent>{
+    SingleActivator(LogicalKeyboardKey.arrowLeft):
+        DirectionalFocusIntent(TraversalDirection.left),
+    SingleActivator(LogicalKeyboardKey.arrowRight):
+        DirectionalFocusIntent(TraversalDirection.right),
+    SingleActivator(LogicalKeyboardKey.arrowDown):
+        DirectionalFocusIntent(TraversalDirection.down),
+    SingleActivator(LogicalKeyboardKey.arrowUp):
+        DirectionalFocusIntent(TraversalDirection.up),
   };
   late Map<Type, Action<Intent>> _actionMap;
   late FocusNode _dayGridFocus;
@@ -253,9 +323,12 @@ class _CalendarKeyboardNavigatorState extends State<_CalendarKeyboardNavigator> 
   void initState() {
     super.initState();
     _actionMap = <Type, Action<Intent>>{
-      NextFocusIntent: CallbackAction<NextFocusIntent>(onInvoke: _handleGridNextFocus),
-      PreviousFocusIntent: CallbackAction<PreviousFocusIntent>(onInvoke: _handleGridPreviousFocus),
-      DirectionalFocusIntent: CallbackAction<DirectionalFocusIntent>(onInvoke: _handleDirectionFocus),
+      NextFocusIntent:
+          CallbackAction<NextFocusIntent>(onInvoke: _handleGridNextFocus),
+      PreviousFocusIntent: CallbackAction<PreviousFocusIntent>(
+          onInvoke: _handleGridPreviousFocus),
+      DirectionalFocusIntent: CallbackAction<DirectionalFocusIntent>(
+          onInvoke: _handleDirectionFocus),
     };
     _dayGridFocus = FocusNode(debugLabel: 'Day Grid');
   }
@@ -298,7 +371,8 @@ class _CalendarKeyboardNavigatorState extends State<_CalendarKeyboardNavigator> 
   void _handleDirectionFocus(DirectionalFocusIntent intent) {
     assert(_focusedDay != null);
     setState(() {
-      final DateTime? nextDate = _nextDateInDirection(_focusedDay!, intent.direction);
+      final DateTime? nextDate =
+          _nextDateInDirection(_focusedDay!, intent.direction);
       if (nextDate != null) {
         _focusedDay = nextDate;
         _dayTraversalDirection = intent.direction;
@@ -306,27 +380,33 @@ class _CalendarKeyboardNavigatorState extends State<_CalendarKeyboardNavigator> 
     });
   }
 
-  static const Map<TraversalDirection, int> _directionOffset = <TraversalDirection, int>{
+  static const Map<TraversalDirection, int> _directionOffset =
+      <TraversalDirection, int>{
     TraversalDirection.up: -DateTime.daysPerWeek,
     TraversalDirection.right: 1,
     TraversalDirection.down: DateTime.daysPerWeek,
     TraversalDirection.left: -1,
   };
 
-  int _dayDirectionOffset(TraversalDirection traversalDirection, TextDirection textDirection) {
+  int _dayDirectionOffset(
+      TraversalDirection traversalDirection, TextDirection textDirection) {
     // Swap left and right if the text direction if RTL
     if (textDirection == TextDirection.rtl) {
       if (traversalDirection == TraversalDirection.left) {
         traversalDirection = TraversalDirection.right;
-      } else if (traversalDirection == TraversalDirection.right) traversalDirection = TraversalDirection.left;
+      } else if (traversalDirection == TraversalDirection.right) {
+        traversalDirection = TraversalDirection.left;
+      }
     }
     return _directionOffset[traversalDirection]!;
   }
 
   DateTime? _nextDateInDirection(DateTime date, TraversalDirection direction) {
     final TextDirection textDirection = Directionality.of(context);
-    final DateTime nextDate = DateUtils.addDaysToDate(date, _dayDirectionOffset(direction, textDirection));
-    if (!nextDate.isBefore(widget.firstDate) && !nextDate.isAfter(widget.lastDate)) {
+    final DateTime nextDate = DateUtils.addDaysToDate(
+        date, _dayDirectionOffset(direction, textDirection));
+    if (!nextDate.isBefore(widget.firstDate) &&
+        !nextDate.isAfter(widget.lastDate)) {
       return nextDate;
     }
     return null;

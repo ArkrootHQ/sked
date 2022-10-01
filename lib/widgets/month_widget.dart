@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'package:kalendar/enums/highlight_painter_style.dart';
 import 'package:kalendar/helpers/painter.dart';
-
-import '../constants.dart';
+import 'package:kalendar/constants.dart';
 import 'focus_date_widget.dart';
 import 'grid_layout_widget.dart';
 
@@ -36,6 +35,7 @@ class MonthItem extends StatefulWidget {
     this.splashColor,
     this.spaceBetweenEachMonth,
     this.spaceBetweenRows,
+    this.dayTextStyle, this.monthNameHeight, this.monthTextStyle,
   })  : assert(!firstDate.isAfter(lastDate)),
         assert(selectedDateStart == null ||
             !selectedDateStart.isBefore(firstDate)),
@@ -124,7 +124,18 @@ class MonthItem extends StatefulWidget {
   /// will be 12.
   final double? spaceBetweenEachMonth;
 
+  /// The text style for all days. By default the text style
+  /// is [textTheme.bodyText2].
+  final TextStyle? dayTextStyle;
+
+  /// Space between rows.
   final double? spaceBetweenRows;
+
+  /// Height of the month name widget.
+  final double? monthNameHeight;
+
+  /// Text style for month names.
+  final TextStyle? monthTextStyle;
 
   @override
   _MonthItemState createState() => _MonthItemState();
@@ -177,7 +188,6 @@ class _MonthItemState extends State<MonthItem> {
       if (focusDirection != null) {
         ScrollPositionAlignmentPolicy policy =
             ScrollPositionAlignmentPolicy.explicit;
-
         switch (focusDirection) {
           case TraversalDirection.up:
           case TraversalDirection.left:
@@ -216,7 +226,7 @@ class _MonthItemState extends State<MonthItem> {
         dayToBuild.isBefore(widget.firstDate);
     BoxDecoration? decoration;
 
-    TextStyle? itemStyle = textTheme.bodyText2;
+    TextStyle? itemStyle = widget.dayTextStyle ?? textTheme.bodyText2;
     final bool isRangeSelected =
         widget.selectedDateStart != null && widget.selectedDateEnd != null;
 
