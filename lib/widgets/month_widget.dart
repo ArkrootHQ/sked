@@ -97,10 +97,14 @@ class MonthItem extends StatefulWidget {
   /// The color of the selected dates.
   final Color? selectedColor;
 
+  /// Text style for the selected day items.
   final TextStyle? selectedTextStyle;
 
+  /// Text style for the disabled day items.
   final TextStyle? disabledTexStyle;
 
+  /// Boolean to hide or show the selection of current date.
+  /// By default the value will be true.
   final bool showCurrentDay;
 
   /// The current day gets a different text color and a circle stroke
@@ -165,6 +169,7 @@ class _MonthItemState extends State<MonthItem> {
       if (focusDirection != null) {
         ScrollPositionAlignmentPolicy policy =
             ScrollPositionAlignmentPolicy.explicit;
+
         switch (focusDirection) {
           case TraversalDirection.up:
           case TraversalDirection.left:
@@ -175,6 +180,7 @@ class _MonthItemState extends State<MonthItem> {
             policy = ScrollPositionAlignmentPolicy.keepVisibleAtEnd;
             break;
         }
+
         Scrollable.ensureVisible(
           primaryFocus!.context!,
           duration: _monthScrollDuration,
