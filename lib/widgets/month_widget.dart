@@ -30,13 +30,20 @@ class MonthItem extends StatefulWidget {
     this.selectedColor,
     this.selectedTextStyle,
     this.disabledTexStyle,
-    this.showCurrentDate = true,
+    this.showCurrentDay = true,
+    this.currentDayStrokeColor,
+    this.itemHeight,
+    this.splashColor,
   })  : assert(!firstDate.isAfter(lastDate)),
-        assert(selectedDateStart == null || !selectedDateStart.isBefore(firstDate)),
+        assert(selectedDateStart == null ||
+            !selectedDateStart.isBefore(firstDate)),
         assert(selectedDateEnd == null || !selectedDateEnd.isBefore(firstDate)),
-        assert(selectedDateStart == null || !selectedDateStart.isAfter(lastDate)),
+        assert(
+            selectedDateStart == null || !selectedDateStart.isAfter(lastDate)),
         assert(selectedDateEnd == null || !selectedDateEnd.isAfter(lastDate)),
-        assert(selectedDateStart == null || selectedDateEnd == null || !selectedDateStart.isAfter(selectedDateEnd)),
+        assert(selectedDateStart == null ||
+            selectedDateEnd == null ||
+            !selectedDateStart.isAfter(selectedDateEnd)),
         super(key: key);
 
   /// The currently selected start date.
@@ -94,7 +101,18 @@ class MonthItem extends StatefulWidget {
 
   final TextStyle? disabledTexStyle;
 
-  final bool showCurrentDate;
+  final bool showCurrentDay;
+
+  /// The current day gets a different text color and a circle stroke
+  /// border. This prop only shows effect when [showCurrentDay] is true.
+  final Color? currentDayStrokeColor;
+
+  /// Item height of each day in month.
+  final double? itemHeight;
+
+  /// The splash color for each day of the month. By default the
+  /// value will be [ColorScheme.primary].
+  final Color? splashColor;
 
   @override
   _MonthItemState createState() => _MonthItemState();
@@ -107,10 +125,12 @@ class _MonthItemState extends State<MonthItem> {
   @override
   void initState() {
     super.initState();
-    final int daysInMonth = DateUtils.getDaysInMonth(widget.displayedMonth.year, widget.displayedMonth.month);
+    final int daysInMonth = DateUtils.getDaysInMonth(
+        widget.displayedMonth.year, widget.displayedMonth.month);
     _dayFocusNodes = List<FocusNode>.generate(
       daysInMonth,
-      (int index) => FocusNode(skipTraversal: true, debugLabel: 'Day ${index + 1}'),
+      (int index) =>
+          FocusNode(skipTraversal: true, debugLabel: 'Day ${index + 1}'),
     );
   }
 
@@ -119,7 +139,8 @@ class _MonthItemState extends State<MonthItem> {
     super.didChangeDependencies();
     // Check to see if the focused date is in this month, if so focus it.
     final DateTime? focusedDate = FocusedDate.of(context)?.date;
-    if (focusedDate != null && DateUtils.isSameMonth(widget.displayedMonth, focusedDate)) {
+    if (focusedDate != null &&
+        DateUtils.isSameMonth(widget.displayedMonth, focusedDate)) {
       _dayFocusNodes[focusedDate.day - 1].requestFocus();
     }
   }
@@ -133,14 +154,17 @@ class _MonthItemState extends State<MonthItem> {
   }
 
   Color _highlightColor(BuildContext context) {
-    return (widget.highLightColor ?? Theme.of(context).colorScheme.primary).withOpacity(0.12);
+    return (widget.highLightColor ?? Theme.of(context).colorScheme.primary)
+        .withOpacity(0.12);
   }
 
   void _dayFocusChanged(bool focused) {
     if (focused) {
-      final TraversalDirection? focusDirection = FocusedDate.of(context)?.scrollDirection;
+      final TraversalDirection? focusDirection =
+          FocusedDate.of(context)?.scrollDirection;
       if (focusDirection != null) {
-        ScrollPositionAlignmentPolicy policy = ScrollPositionAlignmentPolicy.explicit;
+        ScrollPositionAlignmentPolicy policy =
+            ScrollPositionAlignmentPolicy.explicit;
         switch (focusDirection) {
           case TraversalDirection.up:
           case TraversalDirection.left:
@@ -161,26 +185,33 @@ class _MonthItemState extends State<MonthItem> {
   }
 
   // Create day item.
-  Widget _buildDayItem(BuildContext context, DateTime dayToBuild, int firstDayOffset, int daysInMonth) {
+  Widget _buildDayItem(BuildContext context, DateTime dayToBuild,
+      int firstDayOffset, int daysInMonth) {
     final ThemeData theme = Theme.of(context);
     final ColorScheme colorScheme = theme.colorScheme;
     final TextTheme textTheme = theme.textTheme;
-    final MaterialLocalizations localizations = MaterialLocalizations.of(context);
+    final MaterialLocalizations localizations =
+        MaterialLocalizations.of(context);
 
     final TextDirection textDirection = Directionality.of(context);
     final Color highlightColor = _highlightColor(context);
 
     final int day = dayToBuild.day;
 
-    final bool isDisabled = dayToBuild.isAfter(widget.lastDate) || dayToBuild.isBefore(widget.firstDate);
+    final bool isDisabled = dayToBuild.isAfter(widget.lastDate) ||
+        dayToBuild.isBefore(widget.firstDate);
     BoxDecoration? decoration;
 
     TextStyle? itemStyle = textTheme.bodyText2;
-    final bool isRangeSelected = widget.selectedDateStart != null && widget.selectedDateEnd != null;
-    final bool isSelectedDayStart =
-        widget.selectedDateStart != null && dayToBuild.isAtSameMomentAs(widget.selectedDateStart!);
-    final bool isSelectedDayEnd =
-        widget.selectedDateEnd != null && dayToBuild.isAtSameMomentAs(widget.selectedDateEnd!);
+    final bool isRangeSelected =
+        widget.selectedDateStart != null && widget.selectedDateEnd != null;
+
+    final bool isSelectedDayStart = widget.selectedDateStart != null &&
+        dayToBuild.isAtSameMomentAs(widget.selectedDateStart!);
+
+    final bool isSelectedDayEnd = widget.selectedDateEnd != null &&
+        dayToBuild.isAtSameMomentAs(widget.selectedDateEnd!);
+
     final bool isInRange = isRangeSelected &&
         dayToBuild.isAfter(widget.selectedDateStart!) &&
         dayToBuild.isBefore(widget.selectedDateEnd!);
@@ -190,15 +221,18 @@ class _MonthItemState extends State<MonthItem> {
     if (isSelectedDayStart || isSelectedDayEnd) {
       // The selected start and end dates gets a circle background
       // highlight, and a contrasting text color.
-      itemStyle = widget.selectedTextStyle ?? textTheme.bodyText2?.apply(color: colorScheme.onPrimary);
+      itemStyle = widget.selectedTextStyle ??
+          textTheme.bodyText2?.apply(color: colorScheme.onPrimary);
       decoration = BoxDecoration(
         color: widget.selectedColor ?? colorScheme.primary,
         shape: BoxShape.circle,
       );
 
-      if (isRangeSelected && widget.selectedDateStart != widget.selectedDateEnd) {
-        final HighlightPainterStyle style =
-            isSelectedDayStart ? HighlightPainterStyle.highlightTrailing : HighlightPainterStyle.highlightLeading;
+      if (isRangeSelected &&
+          widget.selectedDateStart != widget.selectedDateEnd) {
+        final HighlightPainterStyle style = isSelectedDayStart
+            ? HighlightPainterStyle.highlightTrailing
+            : HighlightPainterStyle.highlightLeading;
         highlightPainter = HighlightPainter(
           color: highlightColor,
           style: style,
@@ -213,8 +247,11 @@ class _MonthItemState extends State<MonthItem> {
         textDirection: textDirection,
       );
     } else if (isDisabled) {
-      itemStyle = widget.disabledTexStyle ?? textTheme.bodyText2?.apply(color: colorScheme.onSurface.withOpacity(0.38));
-    } else if (DateUtils.isSameDay(widget.currentDate, dayToBuild) && widget.showCurrentDate) {
+      itemStyle = widget.disabledTexStyle ??
+          textTheme.bodyText2
+              ?.apply(color: colorScheme.onSurface.withOpacity(0.38));
+    } else if (DateUtils.isSameDay(widget.currentDate, dayToBuild) &&
+        widget.showCurrentDay) {
       // The current day gets a different text color and a circle stroke
       // border.
       itemStyle = textTheme.bodyText2?.apply(color: colorScheme.primary);
@@ -230,11 +267,14 @@ class _MonthItemState extends State<MonthItem> {
     // day of month before the rest of the date, as they are looking
     // for the day of month. To do that we prepend day of month to the
     // formatted full date.
-    String semanticLabel = '${localizations.formatDecimal(day)}, ${localizations.formatFullDate(dayToBuild)}';
+    String semanticLabel =
+        '${localizations.formatDecimal(day)}, ${localizations.formatFullDate(dayToBuild)}';
     if (isSelectedDayStart) {
-      semanticLabel = localizations.dateRangeStartDateSemanticLabel(semanticLabel);
+      semanticLabel =
+          localizations.dateRangeStartDateSemanticLabel(semanticLabel);
     } else if (isSelectedDayEnd) {
-      semanticLabel = localizations.dateRangeEndDateSemanticLabel(semanticLabel);
+      semanticLabel =
+          localizations.dateRangeEndDateSemanticLabel(semanticLabel);
     }
 
     Widget dayWidget = Container(
@@ -261,8 +301,9 @@ class _MonthItemState extends State<MonthItem> {
       dayWidget = InkResponse(
         focusNode: _dayFocusNodes[day - 1],
         onTap: () => widget.onChanged(dayToBuild),
-        radius: monthItemRowHeight / 2 + 4,
-        splashColor: colorScheme.primary.withOpacity(0.38),
+        radius: (widget.itemHeight ?? monthItemRowHeight) / 2 + 4,
+        splashColor:
+            (widget.splashColor ?? colorScheme.primary).withOpacity(0.38),
         onFocusChange: _dayFocusChanged,
         child: dayWidget,
       );
@@ -279,13 +320,15 @@ class _MonthItemState extends State<MonthItem> {
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
     final TextTheme textTheme = themeData.textTheme;
-    final MaterialLocalizations localizations = MaterialLocalizations.of(context);
+    final MaterialLocalizations localizations =
+        MaterialLocalizations.of(context);
     final int year = widget.displayedMonth.year;
     final int month = widget.displayedMonth.month;
     final int daysInMonth = DateUtils.getDaysInMonth(year, month);
     final int dayOffset = DateUtils.firstDayOffset(year, month, localizations);
     final int weeks = ((daysInMonth + dayOffset) / DateTime.daysPerWeek).ceil();
-    final double gridHeight = weeks * monthItemRowHeight + (weeks - 1) * monthItemSpaceBetweenRows;
+    final double gridHeight =
+        weeks * monthItemRowHeight + (weeks - 1) * monthItemSpaceBetweenRows;
     final List<Widget> dayItems = <Widget>[];
 
     for (int i = 0; true; i += 1) {
@@ -316,9 +359,11 @@ class _MonthItemState extends State<MonthItem> {
         start + DateTime.daysPerWeek,
         dayItems.length,
       );
-      final List<Widget> weekList = dayItems.sublist(start, end);
 
-      final DateTime dateAfterLeadingPadding = DateTime(year, month, start - dayOffset + 1);
+      final List<Widget> weekList = dayItems.sublist(start, end);
+      final DateTime dateAfterLeadingPadding =
+          DateTime(year, month, start - dayOffset + 1);
+
       // Only color the edge container if it is after the start date and
       // on/before the end date.
       final bool isLeadingInRange = !(dayOffset > 0 && i == 0) &&
@@ -330,8 +375,11 @@ class _MonthItemState extends State<MonthItem> {
 
       // Only add a trailing edge container if it is for a full week and not a
       // partial week.
-      if (end < dayItems.length || (end == dayItems.length && dayItems.length % DateTime.daysPerWeek == 0)) {
-        final DateTime dateBeforeTrailingPadding = DateTime(year, month, end - dayOffset);
+      if (end < dayItems.length ||
+          (end == dayItems.length &&
+              dayItems.length % DateTime.daysPerWeek == 0)) {
+        final DateTime dateBeforeTrailingPadding =
+            DateTime(year, month, end - dayOffset);
         // Only color the edge container if it is on/after the start date and
         // before the end date.
         final bool isTrailingInRange = widget.selectedDateStart != null &&
@@ -344,9 +392,11 @@ class _MonthItemState extends State<MonthItem> {
       paddedDayItems.addAll(weekList);
     }
 
-    final double maxWidth = MediaQuery.of(context).orientation == Orientation.landscape
-        ? maxCalendarWidthLandscape
-        : maxCalendarWidthPortrait;
+    final double maxWidth =
+        MediaQuery.of(context).orientation == Orientation.landscape
+            ? maxCalendarWidthLandscape
+            : maxCalendarWidthPortrait;
+
     return Column(
       children: <Widget>[
         Container(
@@ -357,7 +407,8 @@ class _MonthItemState extends State<MonthItem> {
           child: ExcludeSemantics(
             child: Text(
               localizations.formatMonthYear(widget.displayedMonth),
-              style: textTheme.bodyText2!.apply(color: themeData.colorScheme.onSurface),
+              style: textTheme.bodyText2!
+                  .apply(color: themeData.colorScheme.onSurface),
             ),
           ),
         ),

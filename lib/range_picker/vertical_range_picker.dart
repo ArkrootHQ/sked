@@ -6,16 +6,8 @@ import 'calendar_date_range_picker.dart';
 const Duration _calendarSizeAnimationDuration = Duration(milliseconds: 200);
 
 /// A Material-style date range picker.
-///
-/// It is used internally by [showDateRangePicker] or can be directly pushed
-/// onto the [Navigator] stack to enable state restoration. See
-/// [showDateRangePicker] for a state restoration app example.
-///
-/// See also:
-///
-///  * [showDateRangePicker], which is a way to display the date picker.
 class VerticalDateRangePicker extends StatefulWidget {
-  /// A Material-style date range picker dialog.
+  /// A Material-style date range picker.
   const VerticalDateRangePicker({
     Key? key,
     this.initialDateRange,

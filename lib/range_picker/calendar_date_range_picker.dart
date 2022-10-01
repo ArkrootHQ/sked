@@ -172,7 +172,7 @@ class _CalendarDateRangePickerState extends State<CalendarDateRangePicker> {
       selectedColor: widget.selectedColor,
       selectedTextStyle: widget.selectedTextStyle,
       disabledTexStyle: widget.disabledTexStyle,
-      showCurrentDate: widget.showCurrentDate ?? true,
+      showCurrentDay: widget.showCurrentDate ?? true,
     );
   }
 

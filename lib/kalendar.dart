@@ -1,3 +1,3 @@
 library kalendar;
 
-export 'range_picker/range_picker.dart';
+export 'range_picker/vertical_range_picker.dart';
