@@ -34,6 +34,8 @@ class MonthItem extends StatefulWidget {
     this.currentDayStrokeColor,
     this.itemHeight,
     this.splashColor,
+    this.spaceBetweenEachMonth,
+    this.spaceBetweenRows,
   })  : assert(!firstDate.isAfter(lastDate)),
         assert(selectedDateStart == null ||
             !selectedDateStart.isBefore(firstDate)),
@@ -117,6 +119,12 @@ class MonthItem extends StatefulWidget {
   /// The splash color for each day of the month. By default the
   /// value will be [ColorScheme.primary].
   final Color? splashColor;
+
+  /// Space between each month. By default the height between each month
+  /// will be 12.
+  final double? spaceBetweenEachMonth;
+
+  final double? spaceBetweenRows;
 
   @override
   _MonthItemState createState() => _MonthItemState();
@@ -334,9 +342,11 @@ class _MonthItemState extends State<MonthItem> {
     final int dayOffset = DateUtils.firstDayOffset(year, month, localizations);
     final int weeks = ((daysInMonth + dayOffset) / DateTime.daysPerWeek).ceil();
     final double gridHeight =
-        weeks * monthItemRowHeight + (weeks - 1) * monthItemSpaceBetweenRows;
-    final List<Widget> dayItems = <Widget>[];
+        weeks * (widget.itemHeight ?? monthItemRowHeight) +
+            (weeks - 1) *
+                (widget.spaceBetweenEachMonth ?? monthItemSpaceBetweenRows);
 
+    final List<Widget> dayItems = <Widget>[];
     for (int i = 0; true; i += 1) {
       // 1-based day of month, e.g. 1-31 for January, and 1-29 for February on
       // a leap year.
@@ -432,7 +442,7 @@ class _MonthItemState extends State<MonthItem> {
             ),
           ),
         ),
-        const SizedBox(height: monthItemFooterHeight),
+        SizedBox(height: widget.spaceBetweenEachMonth ?? monthItemFooterHeight),
       ],
     );
   }
