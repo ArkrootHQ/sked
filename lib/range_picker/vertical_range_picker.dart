@@ -30,6 +30,7 @@ class VerticalDateRangePicker extends StatefulWidget {
     this.spaceBetweenRows,
     this.monthNameHeight,
     this.monthTextStyle,
+    this.daysHeaderTexStyle,
   }) : super(key: key);
 
   /// The date range that the date range picker starts with when it opens.
@@ -122,17 +123,17 @@ class VerticalDateRangePicker extends StatefulWidget {
   /// Text style for month names.
   final TextStyle? monthTextStyle;
 
+  /// Text style for days. By default
+  /// the text style will be [themeData.textTheme.subtitle2].
+  final TextStyle? daysHeaderTexStyle;
+
   @override
-  State<VerticalDateRangePicker> createState() =>
-      _VerticalDateRangePickerState();
+  State<VerticalDateRangePicker> createState() => _VerticalDateRangePickerState();
 }
 
-class _VerticalDateRangePickerState extends State<VerticalDateRangePicker>
-    with RestorationMixin {
-  late final RestorableDateTimeN _selectedStart =
-      RestorableDateTimeN(widget.initialDateRange?.start);
-  late final RestorableDateTimeN _selectedEnd =
-      RestorableDateTimeN(widget.initialDateRange?.end);
+class _VerticalDateRangePickerState extends State<VerticalDateRangePicker> with RestorationMixin {
+  late final RestorableDateTimeN _selectedStart = RestorableDateTimeN(widget.initialDateRange?.start);
+  late final RestorableDateTimeN _selectedEnd = RestorableDateTimeN(widget.initialDateRange?.end);
   final RestorableBool _autoValidate = RestorableBool(false);
   final GlobalKey _calendarPickerKey = GlobalKey();
 
@@ -192,6 +193,7 @@ class _VerticalDateRangePickerState extends State<VerticalDateRangePicker>
           splashColor: widget.splashColor,
           monthNameHeight: widget.monthNameHeight,
           monthTextStyle: widget.monthTextStyle,
+          daysHeaderTexStyle: widget.daysHeaderTexStyle,
         ),
       ),
     );

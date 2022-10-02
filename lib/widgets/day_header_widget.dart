@@ -21,8 +21,7 @@ class DayHeaders extends StatelessWidget {
   /// _ _ _ _ 1 2 3
   /// 4 5 6 7 8 9 10
   /// ```
-  List<Widget> _getDayHeaders(
-      TextStyle headerStyle, MaterialLocalizations localizations) {
+  List<Widget> _getDayHeaders(TextStyle headerStyle, MaterialLocalizations localizations) {
     final List<Widget> result = <Widget>[];
     for (int i = localizations.firstDayOfWeekIndex; true; i = (i + 1) % 7) {
       final String weekday = localizations.narrowWeekdays[i];
@@ -34,14 +33,21 @@ class DayHeaders extends StatelessWidget {
     return result;
   }
 
+  const DayHeaders({
+    this.daysHeaderTexStyle,
+    super.key,
+  });
+
+  /// Text style for days. By default
+  /// the text style will be [themeData.textTheme.subtitle2].
+  final TextStyle? daysHeaderTexStyle;
+
   @override
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
     final ColorScheme colorScheme = themeData.colorScheme;
-    final TextStyle textStyle =
-        themeData.textTheme.subtitle2!.apply(color: colorScheme.onSurface);
-    final MaterialLocalizations localizations =
-        MaterialLocalizations.of(context);
+    final TextStyle textStyle = daysHeaderTexStyle ?? themeData.textTheme.subtitle2!.apply(color: colorScheme.onSurface);
+    final MaterialLocalizations localizations = MaterialLocalizations.of(context);
     final List<Widget> labels = _getDayHeaders(textStyle, localizations);
 
     // Add leading and trailing containers for edges of the custom grid layout.

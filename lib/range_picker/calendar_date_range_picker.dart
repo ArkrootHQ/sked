@@ -30,11 +30,9 @@ class CalendarDateRangePicker extends StatefulWidget {
     this.spaceBetweenRows,
     this.monthNameHeight,
     this.monthTextStyle,
-  })  : initialStartDate = initialStartDate != null
-            ? DateUtils.dateOnly(initialStartDate)
-            : null,
-        initialEndDate =
-            initialEndDate != null ? DateUtils.dateOnly(initialEndDate) : null,
+    this.daysHeaderTexStyle,
+  })  : initialStartDate = initialStartDate != null ? DateUtils.dateOnly(initialStartDate) : null,
+        initialEndDate = initialEndDate != null ? DateUtils.dateOnly(initialEndDate) : null,
         firstDate = DateUtils.dateOnly(firstDate),
         lastDate = DateUtils.dateOnly(lastDate),
         currentDate = DateUtils.dateOnly(currentDate ?? DateTime.now()),
@@ -44,8 +42,7 @@ class CalendarDateRangePicker extends StatefulWidget {
             this.initialEndDate == null ||
             !this.initialStartDate!.isAfter(initialEndDate!),
         'initialStartDate must be on or before initialEndDate.');
-    assert(!this.lastDate.isBefore(this.firstDate),
-        'firstDate must be on or before lastDate.');
+    assert(!this.lastDate.isBefore(this.firstDate), 'firstDate must be on or before lastDate.');
   }
 
   /// The [DateTime] that represents the start of the initial date range selection.
@@ -114,9 +111,12 @@ class CalendarDateRangePicker extends StatefulWidget {
   /// Text style for month names.
   final TextStyle? monthTextStyle;
 
+  /// Text style for days. By default
+  /// the text style will be [themeData.textTheme.subtitle2].
+  final TextStyle? daysHeaderTexStyle;
+
   @override
-  _CalendarDateRangePickerState createState() =>
-      _CalendarDateRangePickerState();
+  _CalendarDateRangePickerState createState() => _CalendarDateRangePickerState();
 }
 
 class _CalendarDateRangePickerState extends State<CalendarDateRangePicker> {
@@ -138,8 +138,7 @@ class _CalendarDateRangePickerState extends State<CalendarDateRangePicker> {
     // Calculate the index for the initially displayed month. This is needed to
     // divide the list of months into two `SliverList`s.
     final DateTime initialDate = widget.initialStartDate ?? widget.currentDate;
-    if (!initialDate.isBefore(widget.firstDate) &&
-        !initialDate.isAfter(widget.lastDate)) {
+    if (!initialDate.isBefore(widget.firstDate) && !initialDate.isAfter(widget.lastDate)) {
       _initialMonthIndex = DateUtils.monthDelta(widget.firstDate, initialDate);
     }
 
@@ -164,8 +163,7 @@ class _CalendarDateRangePickerState extends State<CalendarDateRangePicker> {
     }
   }
 
-  int get _numberOfMonths =>
-      DateUtils.monthDelta(widget.firstDate, widget.lastDate) + 1;
+  int get _numberOfMonths => DateUtils.monthDelta(widget.firstDate, widget.lastDate) + 1;
 
   void _vibrate() {
     switch (Theme.of(context).platform) {
@@ -193,9 +191,7 @@ class _CalendarDateRangePickerState extends State<CalendarDateRangePicker> {
   void _updateSelection(DateTime date) {
     _vibrate();
     setState(() {
-      if (_startDate != null &&
-          _endDate == null &&
-          !date.isBefore(_startDate!)) {
+      if (_startDate != null && _endDate == null && !date.isBefore(_startDate!)) {
         _endDate = date;
         widget.onEndDateChanged?.call(_endDate);
       } else {
@@ -209,13 +205,9 @@ class _CalendarDateRangePickerState extends State<CalendarDateRangePicker> {
     });
   }
 
-  Widget _buildMonthItem(
-      BuildContext context, int index, bool beforeInitialMonth) {
-    final int monthIndex = beforeInitialMonth
-        ? _initialMonthIndex - index - 1
-        : _initialMonthIndex + index;
-    final DateTime month =
-        DateUtils.addMonthsToMonthDate(widget.firstDate, monthIndex);
+  Widget _buildMonthItem(BuildContext context, int index, bool beforeInitialMonth) {
+    final int monthIndex = beforeInitialMonth ? _initialMonthIndex - index - 1 : _initialMonthIndex + index;
+    final DateTime month = DateUtils.addMonthsToMonthDate(widget.firstDate, monthIndex);
     return MonthItem(
       selectedDateStart: _startDate,
       selectedDateEnd: _endDate,
@@ -243,14 +235,13 @@ class _CalendarDateRangePickerState extends State<CalendarDateRangePicker> {
     const Key sliverAfterKey = Key('sliverAfterKey');
     return Column(
       children: <Widget>[
-        DayHeaders(),
+        DayHeaders(daysHeaderTexStyle: widget.daysHeaderTexStyle),
         if (_showWeekBottomDivider) const Divider(height: 0),
         Expanded(
           child: CalendarKeyboardNavigator(
             firstDate: widget.firstDate,
             lastDate: widget.lastDate,
-            initialFocusedDay:
-                _startDate ?? widget.initialStartDate ?? widget.currentDate,
+            initialFocusedDay: _startDate ?? widget.initialStartDate ?? widget.currentDate,
             // In order to prevent performance issues when displaying the
             // correct initial month, 2 `SliverList`s are used to split the
             // months. The first item in the second SliverList is the initial
@@ -262,16 +253,14 @@ class _CalendarDateRangePickerState extends State<CalendarDateRangePicker> {
               slivers: <Widget>[
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) =>
-                        _buildMonthItem(context, index, true),
+                    (BuildContext context, int index) => _buildMonthItem(context, index, true),
                     childCount: _initialMonthIndex,
                   ),
                 ),
                 SliverList(
                   key: sliverAfterKey,
                   delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) =>
-                        _buildMonthItem(context, index, false),
+                    (BuildContext context, int index) => _buildMonthItem(context, index, false),
                     childCount: _numberOfMonths - _initialMonthIndex,
                   ),
                 ),
@@ -283,5 +272,3 @@ class _CalendarDateRangePickerState extends State<CalendarDateRangePicker> {
     );
   }
 }
-
-
