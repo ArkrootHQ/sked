@@ -9,7 +9,9 @@ class MonthItemGridDelegate extends SliverGridDelegate {
 
   @override
   SliverGridLayout getLayout(SliverConstraints constraints) {
-    final double tileWidth = (constraints.crossAxisExtent - 2 * horizontalPadding) / DateTime.daysPerWeek;
+    final double tileWidth =
+        (constraints.crossAxisExtent - 2 * horizontalPadding) /
+            DateTime.daysPerWeek;
     return _MonthSliverGridLayout(
       crossAxisCount: DateTime.daysPerWeek + 2,
       dayChildWidth: tileWidth,
@@ -92,8 +94,10 @@ class _MonthSliverGridLayout extends SliverGridLayout {
   @override
   SliverGridGeometry getGeometryForChildIndex(int index) {
     final int adjustedIndex = index % crossAxisCount;
-    final bool isEdge = adjustedIndex == 0 || adjustedIndex == crossAxisCount - 1;
-    final double crossAxisStart = math.max(0, (adjustedIndex - 1) * dayChildWidth + edgeChildWidth);
+    final bool isEdge =
+        adjustedIndex == 0 || adjustedIndex == crossAxisCount - 1;
+    final double crossAxisStart =
+        math.max(0, (adjustedIndex - 1) * dayChildWidth + edgeChildWidth);
 
     return SliverGridGeometry(
       scrollOffset: (index ~/ crossAxisCount) * _rowHeight,

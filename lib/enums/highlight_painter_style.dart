@@ -1,4 +1,3 @@
-
 /// Determines which style to use to paint the highlight.
 enum HighlightPainterStyle {
   /// Paints nothing.

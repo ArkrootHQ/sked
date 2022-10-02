@@ -17,7 +17,8 @@ class FocusedDate extends InheritedWidget {
 
   @override
   bool updateShouldNotify(FocusedDate oldWidget) {
-    return !DateUtils.isSameDay(date, oldWidget.date) || scrollDirection != oldWidget.scrollDirection;
+    return !DateUtils.isSameDay(date, oldWidget.date) ||
+        scrollDirection != oldWidget.scrollDirection;
   }
 
   static FocusedDate? of(BuildContext context) {

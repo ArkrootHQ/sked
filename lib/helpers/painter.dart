@@ -29,7 +29,8 @@ class HighlightPainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     final Rect rectLeft = Rect.fromLTWH(0, 0, size.width / 2, size.height);
-    final Rect rectRight = Rect.fromLTWH(size.width / 2, 0, size.width / 2, size.height);
+    final Rect rectRight =
+        Rect.fromLTWH(size.width / 2, 0, size.width / 2, size.height);
 
     switch (style) {
       case HighlightPainterStyle.highlightTrailing:

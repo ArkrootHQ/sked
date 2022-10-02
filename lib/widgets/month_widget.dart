@@ -35,7 +35,9 @@ class MonthItem extends StatefulWidget {
     this.splashColor,
     this.spaceBetweenEachMonth,
     this.spaceBetweenRows,
-    this.dayTextStyle, this.monthNameHeight, this.monthTextStyle,
+    this.dayTextStyle,
+    this.monthNameHeight,
+    this.monthTextStyle,
   })  : assert(!firstDate.isAfter(lastDate)),
         assert(selectedDateStart == null ||
             !selectedDateStart.isBefore(firstDate)),
