@@ -282,7 +282,7 @@ class _MonthItemState extends State<MonthItem> {
       // border.
       itemStyle = textTheme.bodyText2?.apply(color: colorScheme.primary);
       decoration = BoxDecoration(
-        border: Border.all(color: colorScheme.primary),
+        border: Border.all(color: widget.currentDayStrokeColor ?? colorScheme.primary),
         shape: BoxShape.circle,
       );
     }

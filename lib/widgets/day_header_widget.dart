@@ -35,8 +35,8 @@ class DayHeaders extends StatelessWidget {
 
   const DayHeaders({
     this.daysHeaderTexStyle,
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   /// Text style for days. By default
   /// the text style will be [themeData.textTheme.subtitle2].
@@ -46,7 +46,8 @@ class DayHeaders extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
     final ColorScheme colorScheme = themeData.colorScheme;
-    final TextStyle textStyle = daysHeaderTexStyle ?? themeData.textTheme.subtitle2!.apply(color: colorScheme.onSurface);
+    final TextStyle textStyle =
+        daysHeaderTexStyle ?? themeData.textTheme.subtitle2!.apply(color: colorScheme.onSurface);
     final MaterialLocalizations localizations = MaterialLocalizations.of(context);
     final List<Widget> labels = _getDayHeaders(textStyle, localizations);
 
