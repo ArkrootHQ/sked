@@ -8,7 +8,7 @@
 
 ### Calender utilities currently available
 
-- ✅ Vertical Calender.
+- 🚧 Vertical Calender.
 - 🚧 Horizontal Calender.
 
 # Usage
