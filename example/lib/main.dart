@@ -45,6 +45,9 @@ class _MyHomePageState extends State<MyHomePage> {
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
+          dayTextStyle: const TextStyle(
+            color: Colors.black,
+          ),
           initialDateRange: DateTimeRange(
             start: DateTime.now(),
             end: DateTime.now().add(
