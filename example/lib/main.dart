@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:almanac/almanac.dart';
+import 'package:sked/sked.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,8 +10,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      title: 'almanac',
-      home: MyHomePage(title: 'Kalendar Demo Home Page'),
+      title: 'sked',
+      home: MyHomePage(title: 'sked Demo Home Page'),
     );
   }
 }

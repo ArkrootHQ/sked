@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/rendering.dart';
-import 'package:almanac/constants.dart';
+import 'package:sked/constants.dart';
 
 const monthItemGridDelegate = MonthItemGridDelegate();
 

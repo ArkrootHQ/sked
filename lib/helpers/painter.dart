@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:almanac/enums/highlight_painter_style.dart';
+import 'package:sked/enums/highlight_painter_style.dart';
 
 /// This custom painter will add a background highlight to its child.
 ///

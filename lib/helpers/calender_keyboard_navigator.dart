@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:almanac/widgets/focus_date_widget.dart';
+import 'package:sked/widgets/focus_date_widget.dart';
 
 class CalendarKeyboardNavigator extends StatefulWidget {
   const CalendarKeyboardNavigator({

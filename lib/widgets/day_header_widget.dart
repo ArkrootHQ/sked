@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:almanac/constants.dart';
+import 'package:sked/constants.dart';
 import 'grid_layout_widget.dart';
 
 class DayHeaders extends StatelessWidget {
