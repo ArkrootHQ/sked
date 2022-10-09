@@ -1,6 +1,7 @@
 name: kalendar
-description: A new Flutter package project.
+description: Calendar utility that gives you access to multiple calendars.
 version: 0.0.1-dev.1
+homepage: https://github.com/ArkrootHQ/kalender
 
 environment:
   sdk: ">=2.16.0 <3.0.0"
