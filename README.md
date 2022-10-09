@@ -40,8 +40,7 @@ We can utilize the public props available for `VerticalDateRangePicker` to style
               const Duration(days: 3),
             ),
           ),
-
-        )
+        );
 
 </pre>
 </td>
