@@ -1,9 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
-import 'package:kalendar/enums/highlight_painter_style.dart';
-import 'package:kalendar/helpers/painter.dart';
-import 'package:kalendar/constants.dart';
+import 'package:almanac/enums/highlight_painter_style.dart';
+import 'package:almanac/helpers/painter.dart';
+import 'package:almanac/constants.dart';
 import 'focus_date_widget.dart';
 import 'grid_layout_widget.dart';
 

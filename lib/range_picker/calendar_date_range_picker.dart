@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kalendar/widgets/month_widget.dart';
-import 'package:kalendar/widgets/day_header_widget.dart';
-import 'package:kalendar/helpers/calender_keyboard_navigator.dart';
+import 'package:almanac/widgets/month_widget.dart';
+import 'package:almanac/widgets/day_header_widget.dart';
+import 'package:almanac/helpers/calender_keyboard_navigator.dart';
 
 /// Displays a scrollable calendar grid that allows a user to select a range
 /// of dates.

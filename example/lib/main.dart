@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kalendar/almanac.dart';
+import 'package:almanac/almanac.dart';
 
 void main() {
   runApp(const MyApp());
