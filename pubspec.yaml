@@ -1,7 +1,7 @@
-name: kalendar
+name: almanac
 description: Calendar utility that gives you access to multiple calendars.
 version: 0.0.1-dev.1
-homepage: https://github.com/ArkrootHQ/kalender
+homepage: https://github.com/ArkrootHQ/almanac
 
 environment:
   sdk: ">=2.16.0 <3.0.0"

@@ -1,4 +1,4 @@
-![kalender](https://raw.githubusercontent.com/Arkroot-Innovations/kalender/main/images/kalender.png)
+![almanac](https://raw.githubusercontent.com/Arkroot-Innovations/kalender/main/images/almanac.png)
 
 <p align="center">Simple and easy to use calendar utility package 🌈. </p>
 
